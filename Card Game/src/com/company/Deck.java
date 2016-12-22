@@ -18,6 +18,10 @@ public class Deck {
         return (Card) deck.get(i);
     }
 
+    public Card getTopCard(){
+        return (Card) deck.get(deck.size()-1);
+    }
+
     /**
      * Uses Collections to shuffle deck
      */
@@ -103,15 +107,24 @@ public class Deck {
 
     public int howManyMoreCards(){
         if( getCard(deck.size()-1).getValue().equals("Ace"))
-            return 3;
+            return 4;
         else if ( getCard(deck.size()-1).getValue().equals("King"))
-            return 2;
+            return 3;
         else if ( getCard(deck.size()-1).getValue().equals("Queen"))
-            return 1;
+            return 2;
         else if ( getCard(deck.size()-1).getValue().equals("Jack"))
-            return 0;
+            return 1;
         else
             return 0;
+    }
+
+    public void printDeck(){
+        System.out.println("---Game Deck---");
+        for(int i = 0; i <deck.size(); i++){
+            System.out.print(getCard(i).getValue());
+            System.out.println(" " + getCard(i).getSuit());
+        }
+        System.out.println("----End Game Deck----\n");
     }
 
     public void playCard(Deck gameDeck){

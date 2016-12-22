@@ -25,65 +25,71 @@ public class Game{
         myDeck.shuffle();
         compDeck.shuffle();
         gameDeck.wipe();
-        System.out.println("You go first!");
-        for(int i = 0; i <myDeck.getSize(); i++){
-            System.out.print(myDeck.getCard(i).getValue());
-            System.out.println(" " + myDeck.getCard(i).getSuit());
-        }
-        meGo();
-        //compGo();
-    }
-
-    public void meGo(){
-        String enter;
-
-        while(true){
-            System.out.println("---Game Deck---");
-            for(int i = 0; i <gameDeck.getSize(); i++){
-                System.out.print(gameDeck.getCard(i).getValue());
-                System.out.println(" " + gameDeck.getCard(i).getSuit());
-            }
-            System.out.println("----End Game Deck----\n");
-
+        int coinRoll = (int)(Math.random()*2);
+        boolean continueMove;
+        if(coinRoll == 0 || coinRoll == 1){
+            System.out.println(me.getName() + " goes first.");
             do{
-                System.out.println(":Choose: ");
-                enter = sc.nextLine();
-            } while(!processInput(enter));
-
+                gameDeck.printDeck();
+                continueMove = myMove();
+            }while(continueMove);
         }
+        else
+            System.out.println(comp.getName() + " goes first.");
+
+
     }
 
-    public boolean processInput(String enter){
-        int howManyMoreCards = 1;
-        if(enter.equals("")){ //if they hit enter
-            if(gameDeck.topCardIsJAKQ()){ //if the top gameDeck card is special
-                howManyMoreCards += gameDeck.howManyMoreCards(); //then they play more cards, depending on special card
-                for(int i = 0; i < howManyMoreCards; i++){ //last comment actually being done
-                    myDeck.playCard(gameDeck);
-                    System.out.println("You played a card.");
-                    if(gameDeck.topCardIsJAKQ()){
-                        System.out.println("You just saved yourself!");
-                        break;
-                    }
+    public boolean myMove(){
+        int howManyMoreCards = 0;
+        boolean continueMove;
+
+        if(gameDeck.topCardIsJAKQ()){ //if top is JAQK
+            howManyMoreCards += gameDeck.howManyMoreCards(); //then they play more cards, depending on special card
+            System.out.println(gameDeck.getTopCard().getValue() + " card is on top. You need to play maximum of " + howManyMoreCards + " card(s)!");
+            for(int i = 0; i < howManyMoreCards; i++){
+                continueMove = processMove(getInput());
+                if(!continueMove) //don't continue when they successfully slap a sandwich or double
+                    return false;
+                else if (gameDeck.topCardIsJAKQ()) { //if said played card is special, then they end their turn
+                    System.out.println("You just saved yourself by playing a JAQK!");
+                    return false; //ends player turn
                 }
             }
-            else{ //if top gameDeck card is not special
-                myDeck.playCard(gameDeck); //just play one card normally
-                System.out.println("You played a card.");
-            }
+        }
+        else{
+            processMove(getInput());
+        }
+        return false;
+    }
+
+    public String getInput(){
+        System.out.println(":Choose: ");
+        return sc.nextLine();
+    }
+
+    public boolean processMove(String enter){
+
+        if(enter.equals("")) { //if they hit enter
+            myDeck.playCard(gameDeck); //just play one card normally
+            System.out.println("You played " + gameDeck.getTopCard());
+            return true; //though this return doesn't do anything
         }
         else if(enter.equalsIgnoreCase("S")){ //if they hit "S" (slap) instead of enter
             if(!gameDeck.isDoubleSandwich()){ //if they slap, but there is no double or sandwich
                 System.out.println("You lost a card. There was no double/sandwich");
                 loseOneCard(myDeck, gameDeck); //they lose a card
+                //true
             }
             else if(gameDeck.isDouble()){ //if they slap, and there IS a double
                 System.out.println("Double!");
                 gameDeckToHand(gameDeck, myDeck); //all cards in gameDeck go to bottom of myDeck
+                return false;
             }
             else if(gameDeck.isSandwich()){ //if they slap, and there IS a sandwich
                 System.out.println("Sandwich!");
                 gameDeckToHand(gameDeck, myDeck); //all cards in gameDeck go to bottom of myDeck
+                return false;
             }
         }
         else if(enter.equalsIgnoreCase("P")){ //if they hit "P" instead of both
