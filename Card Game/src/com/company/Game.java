@@ -1,6 +1,5 @@
 package com.company;
 
-import java.util.Collections;
 import java.util.Scanner;
 
 /**
@@ -12,7 +11,7 @@ public class Game{
     private Deck myDeck;
     private Deck compDeck;
     private Deck gameDeck;
-    Scanner sc = new Scanner(System.in);
+    private Scanner sc = new Scanner(System.in);
 
     public Game(Player me, Player comp, Deck myDeck, Deck compDeck, Deck gameDeck){
         this.me = me;
@@ -45,45 +44,63 @@ public class Game{
                 System.out.println(" " + gameDeck.getCard(i).getSuit());
             }
             System.out.println("----End Game Deck----\n");
-            System.out.println(":Choose: ");
-            enter = sc.nextLine();
-            if(enter.equals("")){
-                gameDeck.add(myDeck.getCard(myDeck.getSize()-1));
-                myDeck.remove(myDeck.getSize()-1);
+
+            do{
+                System.out.println(":Choose: ");
+                enter = sc.nextLine();
+            } while(!processInput(enter));
+
+        }
+    }
+
+    public boolean processInput(String enter){
+        int howManyMoreCards = 1;
+        if(enter.equals("")){ //if they hit enter
+            if(gameDeck.topCardIsJAKQ()){ //if the top gameDeck card is special
+                howManyMoreCards += gameDeck.howManyMoreCards(); //then they play more cards, depending on special card
+                for(int i = 0; i < howManyMoreCards; i++){ //last comment actually being done
+                    myDeck.playCard(gameDeck);
+                    System.out.println("You played a card.");
+                    if(gameDeck.topCardIsJAKQ()){
+                        System.out.println("You just saved yourself!");
+                        break;
+                    }
+                }
+            }
+            else{ //if top gameDeck card is not special
+                myDeck.playCard(gameDeck); //just play one card normally
                 System.out.println("You played a card.");
-                //break;
-            }
-            else if(enter.equalsIgnoreCase("S")){
-                if(!gameDeck.isDoubleSandwich()){
-                    System.out.println("You lost a card. There was no double/sandwich");
-                    loseOneCard(myDeck, gameDeck);
-                    //break;
-                }
-                else if(gameDeck.isDouble()){
-                    System.out.println("Double!");
-                    gameDeckToHand(gameDeck, myDeck);
-                    //break;
-                }
-                else if(gameDeck.isSandwich()){
-                    System.out.println("Sandwich!");
-                    gameDeckToHand(gameDeck, myDeck);
-                    //break;
-                }
-            }
-            else if(enter.equalsIgnoreCase("P")){
-                System.out.println("*****My Deck*****");
-                for(int i = 0; i <myDeck.getSize(); i++){
-                    System.out.print(myDeck.getCard(i).getValue());
-                    System.out.println(" " + myDeck.getCard(i).getSuit());
-                }
-                System.out.println("*****End My Deck*****\n");
-            }
-            else{
-                System.out.println("What was that? Try again.");
             }
         }
+        else if(enter.equalsIgnoreCase("S")){ //if they hit "S" (slap) instead of enter
+            if(!gameDeck.isDoubleSandwich()){ //if they slap, but there is no double or sandwich
+                System.out.println("You lost a card. There was no double/sandwich");
+                loseOneCard(myDeck, gameDeck); //they lose a card
+            }
+            else if(gameDeck.isDouble()){ //if they slap, and there IS a double
+                System.out.println("Double!");
+                gameDeckToHand(gameDeck, myDeck); //all cards in gameDeck go to bottom of myDeck
+            }
+            else if(gameDeck.isSandwich()){ //if they slap, and there IS a sandwich
+                System.out.println("Sandwich!");
+                gameDeckToHand(gameDeck, myDeck); //all cards in gameDeck go to bottom of myDeck
+            }
+        }
+        else if(enter.equalsIgnoreCase("P")){ //if they hit "P" instead of both
+            System.out.println("*****My Deck*****");
+            for(int i = 0; i <myDeck.getSize(); i++){ //this will print out myDeck
+                System.out.print(myDeck.getCard(i).getValue());
+                System.out.println(" " + myDeck.getCard(i).getSuit());
+            }
+            System.out.println("*****End My Deck*****\n");
+            return false;
+        }
+        else{ //if they don't type any of the above
+            System.out.println("What was that? Try again.");
+            return false;
+        }
 
-
+        return true;
     }
 
     public void gameDeckToHand(Deck source, Deck destination){ //gameDeck to myDeck

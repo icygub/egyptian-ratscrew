@@ -88,18 +88,18 @@ public class Deck {
         return false;
     }
 
-//    public boolean isJAKQ(){
-//        if( getCard(deck.size()-1).getValue().equals("Ace"))
-//            return true;
-//        else if ( getCard(deck.size()-1).getValue().equals("King"))
-//            return true;
-//        else if ( getCard(deck.size()-1).getValue().equals("Queen"))
-//            return true;
-//        else if ( getCard(deck.size()-1).getValue().equals("Jack"))
-//            return true;
-//        else
-//            return false;
-//    }
+    public boolean topCardIsJAKQ(){
+        if( getCard(deck.size()-1).getValue().equals("Ace"))
+            return true;
+        else if ( getCard(deck.size()-1).getValue().equals("King"))
+            return true;
+        else if ( getCard(deck.size()-1).getValue().equals("Queen"))
+            return true;
+        else if ( getCard(deck.size()-1).getValue().equals("Jack"))
+            return true;
+        else
+            return false;
+    }
 
     public int howManyMoreCards(){
         if( getCard(deck.size()-1).getValue().equals("Ace"))
@@ -112,6 +112,11 @@ public class Deck {
             return 0;
         else
             return 0;
+    }
+
+    public void playCard(Deck gameDeck){
+        gameDeck.add( (getCard(deck.size()-1)) );
+        deck.remove(deck.size()-1);
     }
 
     public void remove(int index){

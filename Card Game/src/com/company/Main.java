@@ -7,7 +7,9 @@ import java.util.Scanner;
  * v1.0 basic Deck and Card classes
  * v1.1 Deck now creates ArrayList of Card objects
  * v1.2 Added Deck method shuffle()
- * v1.3
+ * v1.3 slapping works. loseOneCard() when slapped incorrectly
+ * v1.4 a isDouble and isSandwich now work when slapped, using gameDeckToHand
+ * v1.5
  */
 public class Main {
 
