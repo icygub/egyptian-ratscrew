@@ -21,20 +21,21 @@ public class Main {
         Deck myDeck = new Deck();
         Deck compDeck = new Deck();
         Deck gameDeck = new Deck();
+        gameDeck.create();
+        gameDeck.shuffle();
+        gameDeck.split(myDeck, compDeck);
+        gameDeck.wipe();
         Game theGame = new Game(me, comp, myDeck, compDeck, gameDeck);
         System.out.println("Time to start!");
-
         theGame.start();
 
-//        System.out.println("\n\n");
-//        for(int i = 0; i <compDeck.getSize(); i++){
-//            System.out.print(compDeck.getCard(i).getValue());
-//            System.out.println(" " + compDeck.getCard(i).getSuit());
+
+//        for(int i = 0; i <myDeck.getSize(); i++){
+//            System.out.print(myDeck.getCardName(i) + "\n");
 //        }
 //        System.out.println("\n\n");
-//        for(int i = 0; i <gameDeck.getSize(); i++){
-//            System.out.print(gameDeck.getCard(i).getValue());
-//            System.out.println(" " + gameDeck.getCard(i).getSuit());
+//        for(int i = 0; i <compDeck.getSize(); i++){
+//            System.out.print(compDeck.getCardName(i) + "\n");
 //        }
     }
 }

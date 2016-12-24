@@ -7,10 +7,23 @@ public class Deck {
     private ArrayList deck = new ArrayList<Card>();
 
     public Deck(){
+    }
+
+    public void create(){
         for(int suit = 0; suit<4; suit++){
             for(int value = 1; value < 14; value++){
                 deck.add(new Card(suit,value));
             }
+        }
+    }
+
+    public void split(Deck deck1, Deck deck2){
+        for(int i = deck.size()-1; i >= deck.size()/2; i--){
+            deck1.add(getCard(i));
+        }
+
+        for(int i = (deck.size()/2)-1; i >= 0; i--){
+            deck2.add(getCard(i));
         }
     }
 
@@ -64,28 +77,13 @@ public class Deck {
         deck.add(card);
     }
 
-    public void addAtIndex(int index){
-
-    }
-
-    public boolean isDoubleSandwich(){
-        if(isDouble())
-            return true;
-        else if (isSandwich())
-            return true;
-        else
-            return false;
-    }
-
     public boolean isDouble(){
         try{
             if(( getCard(deck.size()-1).getValue() ).equals( getCard(deck.size()-2).getValue() )){
                 return true;
             }
-        }catch(Exception e){
-        }
+        }catch(Exception e){}
         return false;
-
     }
 
     public boolean isSandwich(){
@@ -100,7 +98,6 @@ public class Deck {
     }
 
     public boolean topCardIsJAKQ(){
-
         if(deck.size() > 0){
             if( getCard(deck.size()-1).getValue().equals("Ace"))
                 return true;
@@ -115,7 +112,6 @@ public class Deck {
         }
         else
             return false;
-
     }
 
     public int howManyMoreCards(){
@@ -147,11 +143,11 @@ public class Deck {
     }
 
     public void printDeck(){
-        System.out.println("---Game Deck---");
+        System.out.println("\n---Game Deck---");
         for(int i = 0; i <deck.size(); i++){
             System.out.println(getCardName(i));
         }
-        System.out.println("----End Game Deck----\n");
+        System.out.println("----End Game Deck----");
     }
 
     public void playCard(Deck gameDeck){
@@ -162,18 +158,5 @@ public class Deck {
     public void remove(int index){ //this method is essentially copying the ArrayList method .remove(), so is this method really necessary????
         deck.remove(deck.get(index));
     }
-
-    /**
-     * This method should really be in Player, but, because of this crappy code, its easier to leave it here for now.
-     * @return
-     */
-    public int getScore(){
-        return deck.size();
-    }
-
-    public void printScore(){
-        System.out.println();
-    }
-
 
 }
