@@ -16,9 +16,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         System.out.println("Welcome to the card game Egyptian Ratscrew!");
-        System.out.print("What is your name? ");
-        String myName = sc.nextLine();
-        Player me = new Player(myName);
+        Player me = new Player("John");
         Player comp = new Player("Computer");
         Deck myDeck = new Deck();
         Deck compDeck = new Deck();

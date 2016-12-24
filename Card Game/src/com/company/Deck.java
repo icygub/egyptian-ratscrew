@@ -18,8 +18,16 @@ public class Deck {
         return (Card) deck.get(i);
     }
 
+    public String getCardName(int index){
+        return getCard(index).getValue() + " of " + getCard(index).getSuit();
+    }
+
     public Card getTopCard(){
-        return (Card) deck.get(deck.size()-1);
+        return getCard(deck.size()-1);
+    }
+
+    public String getTopCardName(){
+        return getTopCard().getValue() + " of " + getTopCard().getSuit();
     }
 
     /**
@@ -61,7 +69,6 @@ public class Deck {
     }
 
     public boolean isDoubleSandwich(){
-        System.out.println("Were here");
         if(isDouble())
             return true;
         else if (isSandwich())
@@ -93,16 +100,22 @@ public class Deck {
     }
 
     public boolean topCardIsJAKQ(){
-        if( getCard(deck.size()-1).getValue().equals("Ace"))
-            return true;
-        else if ( getCard(deck.size()-1).getValue().equals("King"))
-            return true;
-        else if ( getCard(deck.size()-1).getValue().equals("Queen"))
-            return true;
-        else if ( getCard(deck.size()-1).getValue().equals("Jack"))
-            return true;
+
+        if(deck.size() > 0){
+            if( getCard(deck.size()-1).getValue().equals("Ace"))
+                return true;
+            else if ( getCard(deck.size()-1).getValue().equals("King"))
+                return true;
+            else if ( getCard(deck.size()-1).getValue().equals("Queen"))
+                return true;
+            else if ( getCard(deck.size()-1).getValue().equals("Jack"))
+                return true;
+            else
+                return false;
+        }
         else
             return false;
+
     }
 
     public int howManyMoreCards(){
@@ -118,11 +131,25 @@ public class Deck {
             return 0;
     }
 
+    /**
+     * This should only be used by gameDeck, i.e. gameDeck.toHand(playerDeck)
+     * @param destination
+     */
+    public void toHand(Deck destination){
+        for(int i = deck.size()-1; i >= 0; i--){ //moves all field cards to player's hand
+            destination.add(getCard(i)); //places players top card to top of gameDeck
+            for(int x = 0; x < destination.getSize(); x++){ //sorts gameDeck, moving top card to the bottom
+                destination.swap(x, destination.getSize()-1); //will always be 0
+            }
+            deck.remove(i);
+        }
+        wipe(); //isn't this the same as remove(1) ???
+    }
+
     public void printDeck(){
         System.out.println("---Game Deck---");
         for(int i = 0; i <deck.size(); i++){
-            System.out.print(getCard(i).getValue());
-            System.out.println(" " + getCard(i).getSuit());
+            System.out.println(getCardName(i));
         }
         System.out.println("----End Game Deck----\n");
     }
@@ -132,8 +159,20 @@ public class Deck {
         deck.remove(deck.size()-1);
     }
 
-    public void remove(int index){
+    public void remove(int index){ //this method is essentially copying the ArrayList method .remove(), so is this method really necessary????
         deck.remove(deck.get(index));
+    }
+
+    /**
+     * This method should really be in Player, but, because of this crappy code, its easier to leave it here for now.
+     * @return
+     */
+    public int getScore(){
+        return deck.size();
+    }
+
+    public void printScore(){
+        System.out.println();
     }
 
 

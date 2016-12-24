@@ -16,7 +16,7 @@ public class Player {
         this.score = score;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 }
